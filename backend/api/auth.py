@@ -1,5 +1,5 @@
 from flask import request, jsonify, Blueprint
-from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
+from flask_jwt_extended import create_access_token
 from werkzeug.security import check_password_hash
 
 from extensions import db
@@ -37,7 +37,7 @@ def login():
     user = User.query.filter_by(username=username).first()
 
     if user is not None and check_password_hash(user.password_hash, password):
-        access_token = create_access_token(identity=username)
+        access_token = create_access_token(identity=user.id)
         return jsonify({
                 'name': user.username,
                 'email': user.email,
@@ -46,10 +46,3 @@ def login():
 
     else:
         return jsonify(message='login failed'), 401
-
-
-@auth.route('/protected', methods=['GET'])
-@jwt_required()
-def protected():
-    current_user = get_jwt_identity()
-    return jsonify({'message': f'Hello, {current_user}! This is a protected endpoint'}), 200
