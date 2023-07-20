@@ -3,6 +3,8 @@ from flask_cors import CORS
 from flask_migrate import Migrate
 
 from api.auth import auth
+from api.theatres import theatres
+from api.shows import shows
 
 from extensions import jwt, db
 
@@ -24,6 +26,8 @@ def create_app():
 
 
     app.register_blueprint(auth, url_prefix='/api/auth')
+    app.register_blueprint(theatres, url_prefix='/api/theatres')
+    app.register_blueprint(shows, url_prefix='/api/shows')
 
     # 404 error handler
     @app.errorhandler(404)

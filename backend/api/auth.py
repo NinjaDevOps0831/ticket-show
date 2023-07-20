@@ -11,6 +11,7 @@ auth = Blueprint('auth', __name__)
 @auth.route('/register', methods=['POST'])
 def register():
     data = request.get_json()
+    
     username = data['username']
     password = data['password']
     email = data['email']
@@ -25,8 +26,7 @@ def register():
     db.session.add(user)
     db.session.commit()
 
-    response = {'message': 'Registration successful'}
-    return jsonify(response), 201
+    return jsonify({'message': 'Registration successful'}), 201
 
 
 @auth.route('/login', methods=['POST'])
@@ -45,4 +45,4 @@ def login():
             }), 200
 
     else:
-        return jsonify(message='login failed'), 401
+        return jsonify({ 'message': 'login failed' }), 401
