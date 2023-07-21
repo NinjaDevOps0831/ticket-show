@@ -12,6 +12,7 @@
           <input
             v-model="user.username"
             type="text"
+            id="username"
             class="form-control"
             name="username"
           />
@@ -22,23 +23,15 @@
             v-model="user.password"
             type="password"
             class="form-control"
+            id="password"
             name="password"
           />
         </div>
         <hr />
         <div class="form-group">
-          <button class="btn btn-primary btn-block" :disabled="loading">
-            <span
-              v-show="loading"
-              class="spinner-border spinner-border-sm"
-            ></span>
+          <button class="btn btn-primary btn-block">
             <span>Login</span>
           </button>
-        </div>
-        <div class="form-group">
-          <div v-if="message" class="alert alert-danger" role="alert">
-            {{ message }}
-          </div>
         </div>
       </form>
     </div>
@@ -53,8 +46,6 @@ export default {
   data() {
     return {
       user: new User("", ""),
-      loading: false,
-      message: "",
     };
   },
   computed: {
@@ -64,25 +55,15 @@ export default {
   },
   mounted() {
     if (this.loggedIn) {
-      this.$router.push("/profile");
+      this.$router.push("/");
     }
   },
   methods: {
     handleLogin() {
-      this.loading = true;
       if (this.user.username && this.user.password) {
-        this.$store.dispatch("auth/login", this.user).then(
-          () => {
-            this.$router.push("/profile");
-          },
-          (error) => {
-            this.loading = false;
-            this.message =
-              (error.response && error.response.data) ||
-              error.message ||
-              error.toString();
-          }
-        );
+        this.$store.dispatch("auth/login", this.user).then(() => {
+          this.$router.push("/");
+        });
       }
     },
   },

@@ -29,10 +29,9 @@ def store():
         rate = data['rate']
         tags = data['tags']
         price = data['price']
-        image = data['image']
         theatre_id = data['theatre_id']
 
-        show = Show(name, rate, tags, price, image, theatre_id)
+        show = Show(name, rate, tags, price, theatre_id)
 
         db.session.add(show)
         db.session.commit()
@@ -60,7 +59,6 @@ def update(show_id):
         new_rate = data['rate']
         new_tags = data['tags']
         new_price = data['price']
-        new_image = data['image']
         new_theatre_id = data['theatre_id']
 
         current_show = Show.query.get(show_id)
@@ -72,7 +70,6 @@ def update(show_id):
         current_show.rate = new_rate
         current_show.tags = new_tags
         current_show.price = new_price
-        current_show.image = new_image
         current_show.theatre_id = new_theatre_id
 
         db.session.commit()

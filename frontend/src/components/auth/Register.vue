@@ -14,6 +14,7 @@
               v-model="user.username"
               type="text"
               class="form-control"
+              id="username"
               name="username"
             />
           </div>
@@ -23,6 +24,7 @@
               v-model="user.email"
               type="email"
               class="form-control"
+              id="email"
               name="email"
             />
           </div>
@@ -32,6 +34,7 @@
               v-model="user.password"
               type="password"
               class="form-control"
+              id="password"
               name="password"
             />
           </div>
@@ -41,14 +44,6 @@
           </div>
         </div>
       </form>
-
-      <div
-        v-if="message"
-        class="alert"
-        :class="successful ? 'alert-success' : 'alert-danger'"
-      >
-        {{ message }}
-      </div>
     </div>
   </div>
 </template>
@@ -61,9 +56,6 @@ export default {
   data() {
     return {
       user: new User("", "", ""),
-      submitted: false,
-      successful: false,
-      message: "",
     };
   },
   computed: {
@@ -73,26 +65,19 @@ export default {
   },
   mounted() {
     if (this.loggedIn) {
-      this.$router.push("/profile");
+      this.$router.push("/");
     }
   },
   methods: {
     handleRegister() {
-      this.message = "";
-      this.submitted = true;
-      this.$store.dispatch("auth/register", this.user).then(
-        (data) => {
-          this.message = data.message;
-          this.successful = true;
-        },
-        (error) => {
-          this.message =
-            (error.response && error.response.data) ||
-            error.message ||
-            error.toString();
-          this.successful = false;
-        }
-      );
+      this.$store
+        .dispatch("auth/register", this.user)
+        .then(() => {
+          this.$router.push("/login");
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
   },
 };

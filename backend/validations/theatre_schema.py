@@ -14,9 +14,6 @@ schema = {
             'type': 'integer',
             'minimum': 0
         },
-        'image': {
-            'type': 'string'
-        }
     },
-    'required': ['name', 'place', 'capacity', 'image']
+    'required': ['name', 'place', 'capacity']
 }

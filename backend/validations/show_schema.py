@@ -18,12 +18,9 @@ schema = {
             'type': 'number',
             'minimum': 0
         },
-        'image': {
-            'type': 'string'
-        },
         'theatre_id': {
             'type': 'integer'
         }
     },
-    'required': ['name', 'rate', 'tags', 'price', 'image', 'theatre_id']
+    'required': ['name', 'rate', 'tags', 'price', 'theatre_id']
 }

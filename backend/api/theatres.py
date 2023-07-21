@@ -1,4 +1,5 @@
 from flask import request, jsonify, Blueprint
+from flask_jwt_extended import jwt_required
 from jsonschema import validate
 
 # Import db and Theatre model
@@ -12,6 +13,25 @@ from middlewares.auth import admin_role_required
 from validations.theatre_schema import schema
 
 theatres = Blueprint('theatres', __name__)
+
+
+# Get Router
+@theatres.route('/', methods=['GET'])
+@jwt_required()
+def get():
+    theatres = Theatre.query.all()
+    theatres_data = [
+        {
+            'id': theatre.id,
+            'name': theatre.name,
+            'place': theatre.place,
+            'capacity': theatre.capacity
+        }
+        for theatre in theatres
+    ]
+
+    return jsonify(theatres_data), 200
+
 
 # Store Router
 @theatres.route('/', methods=['POST'])
@@ -27,9 +47,8 @@ def store():
         name = data['name']
         place = data['place']
         capacity = data['capacity']
-        image = data['image']
 
-        theatre = Theatre(name, place, capacity, image)
+        theatre = Theatre(name, place, capacity)
 
         db.session.add(theatre)
         db.session.commit()
@@ -55,7 +74,6 @@ def update(theatre_id):
         new_name = data['name']
         new_place = data['place']
         new_capacity = data['capacity']
-        new_image = data['image']
 
         current_theatre = Theatre.query.get(theatre_id)
 
@@ -68,7 +86,6 @@ def update(theatre_id):
         current_theatre.name = new_name
         current_theatre.place = new_place
         current_theatre.capacity = new_capacity
-        current_theatre.image = new_image
 
         db.session.commit()
 

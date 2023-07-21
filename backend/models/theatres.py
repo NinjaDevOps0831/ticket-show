@@ -7,11 +7,8 @@ class Theatre(db.Model):
     name = db.Column(db.String(20), nullable=False)
     place = db.Column(db.String(20), nullable=False)
     capacity = db.Column(db.Integer, nullable=False)
-    image = db.Column(db.String(128), nullable=False)
-    # image = db.Column(db.LargeBinary)
     
-    def __init__(self, name, place, capacity, image):
+    def __init__(self, name, place, capacity):
         self.name = name
         self.place = place
         self.capacity = capacity
-        self.image = image
