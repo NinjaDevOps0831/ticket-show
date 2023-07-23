@@ -8,7 +8,7 @@
           class="navbar-nav mr-auto"
         >
           <li class="nav-item">
-            <router-link to="/home" class="nav-link"> Home </router-link>
+            <router-link to="/theatres" class="nav-link"> Home </router-link>
           </li>
           <li class="nav-item">
             <router-link to="/summary" class="nav-link"> Summary </router-link>

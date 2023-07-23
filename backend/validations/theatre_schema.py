@@ -4,10 +4,12 @@ schema = {
     'properties': {
         'name': {
             'type': 'string',
+            'minLength': 1,
             'maxLength': 20
         },
         'place': {
             'type': 'string',
+            'minLength': 1,
             'maxLength': 20
         },
         'capacity': {

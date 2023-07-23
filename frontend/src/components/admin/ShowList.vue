@@ -1,10 +1,9 @@
 <template>
   <div class="container">
     <br />
-    <p v-if="isLoading">Loading...</p>
-    <div v-else class="card">
+    <div class="card">
       <div class="card-header">
-        <h2>Theatre List</h2>
+        <h2>Show List</h2>
       </div>
       <div class="card-body">
         <table class="table table-striped">
@@ -12,30 +11,23 @@
             <tr>
               <th scope="col">#</th>
               <th scope="col">Name</th>
-              <th scope="col">Place</th>
-              <th scope="col">Capacity</th>
-              <th scope="col">Shows</th>
+              <th scope="col">Rate</th>
+              <th scope="col">Tags</th>
+              <th scope="col">Price</th>
               <th scope="col">Edit</th>
               <th scope="col">Delete</th>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(item, index) in theatreList" :key="index">
+            <tr v-for="(item, index) in showList" :key="index">
               <td>{{ index + 1 }}</td>
               <td>{{ item.name }}</td>
-              <td>{{ item.place }}</td>
-              <td>{{ item.capacity }}</td>
+              <td>{{ item.rate }}</td>
+              <td>{{ item.tags }}</td>
+              <td>{{ item.price }}</td>
               <td>
                 <router-link
-                  :to="`/theatres/${item.id}/shows`"
-                  class="btn btn-primary btn-sm"
-                >
-                  view shows
-                </router-link>
-              </td>
-              <td>
-                <router-link
-                  :to="`/theatres/${item.id}/edit`"
+                  :to="`/shows/${item.id}/edit`"
                   class="btn btn-primary btn-sm"
                 >
                   edit
@@ -53,7 +45,10 @@
           </tbody>
         </table>
         <div class="d-flex flex-row-reverse">
-          <router-link to="/theatres/create" class="btn btn-primary">
+          <router-link
+            :to="`/theatres/${this.$route.params.id}/shows/create`"
+            class="btn btn-primary"
+          >
             Add
           </router-link>
         </div>
@@ -66,41 +61,35 @@
 import axios from "../../services/axios-config";
 
 export default {
-  name: "TheatreListComponent",
+  name: "ShowListComponent",
   data() {
     return {
-      theatreList: [],
-      isLoading: true,
+      showList: [],
     };
   },
-  async created() {
-    try {
-      const API_URL = "http://localhost:5000/api/theatres/";
-
-      axios
-        .get(API_URL)
-        .then((response) => {
-          this.theatreList = response.data;
-          this.isLoading = false;
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    } catch (error) {
-      console.log(error);
-      this.isLoading = false;
-    }
+  created() {
+    const API_URL = `http://localhost:5000/api/shows/theatres/${this.$route.params.id}`;
+    axios
+      .get(API_URL)
+      .then((response) => {
+        this.showList = response.data;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   },
   methods: {
-    handleDelete(theatre_id) {
-      const API_URL = `http://localhost:5000/api/theatres/${theatre_id}`;
+    handleDelete(show_id) {
+      const API_URL = `http://localhost:5000/api/shows/${show_id}`;
       axios
         .delete(API_URL)
         .then(() => {
           axios
-            .get("http://localhost:5000/api/theatres/")
+            .get(
+              `http://localhost:5000/api/shows/theatres/${this.$route.params.id}`
+            )
             .then((response) => {
-              this.theatreList = response.data;
+              this.showList = response.data;
             })
             .catch((error) => {
               console.log(error);

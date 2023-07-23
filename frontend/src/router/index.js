@@ -12,11 +12,6 @@ const adminRoutes = [
     component: () => import("../components/auth/Register.vue"),
   },
   {
-    path: "/home",
-    name: "home",
-    component: () => import("../components/admin/TheatreList.vue"),
-  },
-  {
     path: "/theatres",
     name: "theatre_list",
     component: () => import("../components/admin/TheatreList.vue"),
@@ -27,9 +22,24 @@ const adminRoutes = [
     component: () => import("../components/admin/CreateTheatre.vue"),
   },
   {
-    path: "/shows/create",
+    path: "/theatres/:id/edit",
+    name: "edit_theatre",
+    component: () => import("../components/admin/EditTheatre.vue"),
+  },
+  {
+    path: "/theatres/:id/shows",
+    name: "show_list",
+    component: () => import("../components/admin/ShowList.vue"),
+  },
+  {
+    path: "/theatres/:id/shows/create",
     name: "create_show",
     component: () => import("../components/admin/CreateShow.vue"),
+  },
+  {
+    path: "/shows/:id/edit",
+    name: "edit_show",
+    component: () => import("../components/admin/EditShow.vue"),
   },
   {
     path: "/profile",

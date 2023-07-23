@@ -21,31 +21,31 @@ def register():
     # Validate datas
     try:
         validate(instance=data, schema=register_schema)
-
-        # Validate Success
-        username = data['username']
-        email = data['email']
-        password = data['password']
-
-        existing_user = User.query.filter_by(username=username).first()
-
-        # Check user name is taken
-        if existing_user:
-            # Username is already taken
-            return jsonify({'message': 'Username already taken'}), 400
-        
-        # Check if it's admin
-        count_user = db.session.query(User).count()
-
-        user = User(username, False, password, email) if count_user else User(username, True, password, email)
-        db.session.add(user)
-        db.session.commit()
-
-        return jsonify({'message': 'Registration successful'}), 201
-
     # Validate failed
     except Exception as e:
         return jsonify({'error': str(e)}), 400
+
+    # Validate Success
+    username = data['username']
+    email = data['email']
+    password = data['password']
+
+    same_name = User.query.filter_by(username=username).first()
+    same_email = User.query.filter_by(email=email).first()
+
+    # Check user name is taken
+    if same_name or same_email:
+        # Username is already taken
+        return jsonify({'message': 'Username or E-mail already taken'}), 400
+    
+    # Check if it's admin
+    count_user = db.session.query(User).count()
+
+    user = User(username, False, password, email) if count_user else User(username, True, password, email)
+    db.session.add(user)
+    db.session.commit()
+
+    return jsonify({'message': 'Registration successful'}), 201
 
 
 # Login Router
@@ -56,27 +56,27 @@ def login():
     # Validate datas
     try:
         validate(instance=data, schema=login_schema)
-
-        # Validate Success
-        username = request.json.get("username")
-        password = request.json.get("password")
-
-        user = User.query.filter_by(username=username).first()
-
-        # Check if user exited and password is correct
-        if user is not None and check_password_hash(user.password_hash, password):
-            access_token = create_access_token(identity=user.id)
-            return jsonify({
-                    'name': user.username,
-                    'email': user.email,
-                    'is_admin': user.is_admin,
-                    'access_token': access_token
-                }), 200
-
-        # User not existed or password is not correct
-        else:
-            return jsonify({ 'message': 'login failed' }), 401
-    
     # Validate failed
     except Exception as e:
         return jsonify({'error': str(e)}), 400
+
+    # Validate Success
+    username = request.json.get("username")
+    password = request.json.get("password")
+
+    user = User.query.filter_by(username=username).first()
+
+    # Check if user exited and password is correct
+    if user is not None and check_password_hash(user.password_hash, password):
+        access_token = create_access_token(identity=user.id)
+        return jsonify({
+                'name': user.username,
+                'email': user.email,
+                'is_admin': user.is_admin,
+                'access_token': access_token
+            }), 200
+
+    # User not existed or password is not correct
+    else:
+        return jsonify({ 'message': 'login failed' }), 401
+    

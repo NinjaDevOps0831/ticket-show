@@ -3,7 +3,7 @@
     <br />
     <div class="card">
       <div class="card-header">
-        <h2>Add Show</h2>
+        <h2>Edit Show</h2>
       </div>
       <div class="card-body">
         <div v-if="error" class="alert alert-danger">
@@ -64,27 +64,42 @@
 import axios from "../../services/axios-config";
 
 export default {
-  name: "CreateShowComponent",
+  name: "EditShowComponent",
   data() {
     return {
       show: {},
       error: null,
     };
   },
+  created() {
+    const API_URL = `http://localhost:5000/api/shows/${this.$route.params.id}`;
+
+    axios
+      .get(API_URL)
+      .then((response) => {
+        this.show.id = response.data.id;
+        this.show.name = response.data.name;
+        this.show.rate = response.data.rate;
+        this.show.tags = response.data.tags;
+        this.show.price = response.data.price;
+        this.show.theatre_id = response.data.theatre_id;
+      })
+      .catch(() => {});
+  },
   methods: {
     handleForm() {
-      const API_URL = "http://localhost:5000/api/shows/";
+      const API_URL = `http://localhost:5000/api/shows/${this.$route.params.id}`;
 
       axios
-        .post(API_URL, {
+        .put(API_URL, {
           name: this.show.name,
           rate: this.show.rate,
           tags: this.show.tags,
           price: this.show.price,
-          theatre_id: Number(this.$route.params.id),
+          theatre_id: this.show.theatre_id,
         })
         .then(() => {
-          this.$router.push(`/theatres/${this.$route.params.id}/shows`);
+          this.$router.push(`/theatres/${this.show.theatre_id}/shows`);
         })
         .catch((err) => {
           this.error = err;

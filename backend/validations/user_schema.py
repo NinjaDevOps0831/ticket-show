@@ -4,10 +4,12 @@ register_schema = {
     'properties': {
         'username': {
             'type': 'string',
+            'minLength': 1,
             'maxLength': 20
         },
         'email': {
             'type': 'string',
+            'minLength': 1,
             'format': 'email'
         },
         'password': {
@@ -23,6 +25,7 @@ login_schema = {
     'properties': {
         'username': {
             'type': 'string',
+            'minLength': 1,
             'maxLength': 20
         },
         'password': {

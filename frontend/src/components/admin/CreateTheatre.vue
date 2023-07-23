@@ -1,49 +1,63 @@
 <template>
-  <div class="container row">
-    <div class="col-md-8">
-      <form @submit.prevent="handleForm">
-        <div class="mb-3">
-          <label for="name" class="form-label">Name</label>
-          <input
-            v-model="theatre.name"
-            type="text"
-            class="form-control"
-            id="name"
-          />
+  <div class="container">
+    <br />
+    <div class="card">
+      <div class="card-header">
+        <h2>Add Theatre</h2>
+      </div>
+      <div class="card-body">
+        <div v-if="error" class="alert alert-danger">
+          <strong>Error!</strong> Invalid Parameter.
         </div>
-        <div class="mb-3">
-          <label for="place" class="form-label">Place</label>
-          <input
-            v-model="theatre.place"
-            type="text"
-            class="form-control"
-            id="place"
-          />
-        </div>
-        <div class="mb-3">
-          <label for="capacity" class="form-label">Capacity</label>
-          <input
-            v-model="theatre.capacity"
-            type="number"
-            class="form-control"
-            id="capacity"
-          />
-        </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
-      </form>
+        <form @submit.prevent="handleForm">
+          <div class="mb-3">
+            <label for="name" class="form-label">Name</label>
+            <input
+              v-model="theatre.name"
+              type="text"
+              class="form-control"
+              id="name"
+            />
+          </div>
+          <div class="mb-3">
+            <label for="place" class="form-label">Place</label>
+            <input
+              v-model="theatre.place"
+              type="text"
+              class="form-control"
+              id="place"
+            />
+          </div>
+          <div class="mb-3">
+            <label for="capacity" class="form-label">Capacity</label>
+            <input
+              v-model="theatre.capacity"
+              type="number"
+              class="form-control"
+              id="capacity"
+            />
+          </div>
+          <div class="d-flex flex-row-reverse">
+            <router-link to="/theatres" class="btn btn-primary">
+              Back
+            </router-link>
+            <button type="submit" class="btn btn-primary">Submit</button>
+          </div>
+        </form>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import Theatre from "../../models/theatre";
 import axios from "../../services/axios-config";
 
 export default {
   name: "CreateTheatreComponent",
   data() {
     return {
-      theatre: new Theatre("", "", 0),
+      theatre: {},
+      error: null,
     };
   },
   methods: {
@@ -56,11 +70,11 @@ export default {
           place: this.theatre.place,
           capacity: this.theatre.capacity,
         })
-        .then((response) => {
-          console.log(response.data);
+        .then(() => {
+          this.$router.push("/theatres");
         })
-        .catch((error) => {
-          console.log(error);
+        .catch((err) => {
+          this.error = err;
         });
     },
   },

@@ -4,14 +4,17 @@ schema = {
     'properties': {
         'name': {
             'type': 'string',
+            'minLength': 1,
             'maxLength': 20
         },
         'rate': {
             'type': 'number',
-            'minimum': 0
+            'minimum': 0,
+            'maximum': 10
         },
         'tags': {
             'type': 'string',
+            'minLength': 1,
             'maxLength': 128
         },
         'price': {

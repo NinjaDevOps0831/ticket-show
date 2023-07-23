@@ -3,7 +3,7 @@
     <br />
     <div class="card">
       <div class="card-header">
-        <h2>Add Show</h2>
+        <h2>Edit Theatre</h2>
       </div>
       <div class="card-body">
         <div v-if="error" class="alert alert-danger">
@@ -13,39 +13,28 @@
           <div class="mb-3">
             <label for="name" class="form-label">Name</label>
             <input
-              v-model="show.name"
+              v-model="theatre.name"
               type="text"
               class="form-control"
               id="name"
             />
           </div>
           <div class="mb-3">
-            <label for="rate" class="form-label">Rate</label>
+            <label for="place" class="form-label">Place</label>
             <input
-              v-model="show.rate"
-              type="number"
-              step="0.1"
-              class="form-control"
-              id="rate"
-            />
-          </div>
-          <div class="mb-3">
-            <label for="tags" class="form-label">Tags</label>
-            <input
-              v-model="show.tags"
+              v-model="theatre.place"
               type="text"
               class="form-control"
-              id="tags"
+              id="place"
             />
           </div>
           <div class="mb-3">
-            <label for="price" class="form-label">Price</label>
+            <label for="capacity" class="form-label">Capacity</label>
             <input
-              v-model="show.price"
+              v-model="theatre.capacity"
               type="number"
-              step="0.01"
               class="form-control"
-              id="price"
+              id="capacity"
             />
           </div>
           <div class="d-flex flex-row-reverse">
@@ -64,27 +53,38 @@
 import axios from "../../services/axios-config";
 
 export default {
-  name: "CreateShowComponent",
+  name: "EditTheatreComponent",
   data() {
     return {
-      show: {},
+      theatre: {},
       error: null,
     };
   },
+  created() {
+    const API_URL = `http://localhost:5000/api/theatres/${this.$route.params.id}`;
+
+    axios
+      .get(API_URL)
+      .then((response) => {
+        this.theatre.id = response.data.id;
+        this.theatre.name = response.data.name;
+        this.theatre.place = response.data.place;
+        this.theatre.capacity = response.data.capacity;
+      })
+      .catch(() => {});
+  },
   methods: {
     handleForm() {
-      const API_URL = "http://localhost:5000/api/shows/";
+      const API_URL = `http://localhost:5000/api/theatres/${this.$route.params.id}`;
 
       axios
-        .post(API_URL, {
-          name: this.show.name,
-          rate: this.show.rate,
-          tags: this.show.tags,
-          price: this.show.price,
-          theatre_id: Number(this.$route.params.id),
+        .put(API_URL, {
+          name: this.theatre.name,
+          place: this.theatre.place,
+          capacity: this.theatre.capacity,
         })
         .then(() => {
-          this.$router.push(`/theatres/${this.$route.params.id}/shows`);
+          this.$router.push("/theatres");
         })
         .catch((err) => {
           this.error = err;

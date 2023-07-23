@@ -1,6 +1,9 @@
 <template>
   <div class="col-md-12">
     <div class="card card-container">
+      <div v-if="error" class="alert alert-danger">
+        <strong>Error!</strong> Invalid Parameter.
+      </div>
       <img
         id="profile-img"
         src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
@@ -49,13 +52,12 @@
 </template>
 
 <script>
-import User from "../../models/user";
-
 export default {
   name: "RegisterComponent",
   data() {
     return {
-      user: new User("", "", ""),
+      user: {},
+      error: null,
     };
   },
   computed: {
@@ -65,7 +67,7 @@ export default {
   },
   mounted() {
     if (this.loggedIn) {
-      this.$router.push("/");
+      this.$router.push("/theatres");
     }
   },
   methods: {
@@ -76,7 +78,7 @@ export default {
           this.$router.push("/login");
         })
         .catch((err) => {
-          console.log(err);
+          this.error = err;
         });
     },
   },
